@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/play_bg"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="1041pt"
+        android:layout_height="700pt"
+        android:layout_marginLeft="43pt"
+        android:layout_marginTop="40pt">
+
+        <com.winwang.storybooks.widget.EmptyControlVideo
+            android:id="@+id/player_video"
+            android:layout_width="817pt"
+            android:layout_height="465pt"
+            android:layout_marginLeft="45pt"
+            android:layout_marginTop="96pt"></com.winwang.storybooks.widget.EmptyControlVideo>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/dianshi" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="120pt"
+            android:layout_marginRight="70pt"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="96pt"
+                android:layout_height="107pt"
+                android:src="@drawable/list_story_icon_down" />
+
+            <ImageView
+                android:layout_width="96pt"
+                android:layout_height="100pt"
+                android:layout_marginTop="20pt"
+                android:src="@drawable/play_like_nor" />
+
+            <ImageView
+                android:layout_width="96pt"
+                android:layout_height="96pt"
+                android:layout_marginTop="20pt"
+                android:src="@drawable/play_pinglun" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="830pt"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="50pt"
+            android:layout_marginBottom="65pt"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="67pt"
+                android:layout_height="74pt"
+                android:src="@drawable/play_suspend" />
+
+            <SeekBar
+                android:layout_width="0dp"
+                android:layout_height="37pt"
+                android:layout_marginLeft="50pt"
+                android:layout_marginRight="40pt"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="67pt"
+                android:layout_height="74pt"
+                android:src="@drawable/play_voice" />
+
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+    <ImageView
+        android:layout_width="198pt"
+        android:layout_height="339pt"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="30pt"
+        android:layout_marginBottom="60pt"
+        android:src="@drawable/play_bear" />
+
+
+</RelativeLayout>

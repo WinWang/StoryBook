@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="500pt"
+    android:layout_height="316pt">
+
+    <ImageView
+        android:id="@+id/iv_home_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="#e5e5e5" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/index_kuang" />
+
+    <TextView
+        android:id="@+id/tv_home_title"
+        android:layout_width="wrap_content"
+        android:layout_height="60pt"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="@drawable/list_button"
+        android:gravity="center"
+        android:padding="0dp"
+        android:singleLine="true"
+        android:text=" 哈哈哈"
+        android:textColor="#fff"
+        android:textSize="30pt" />
+
+
+</FrameLayout>

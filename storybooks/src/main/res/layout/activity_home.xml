@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/index_bg">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_home"
+        android:layout_width="match_parent"
+        android:layout_height="500pt"
+        android:layout_marginTop="60pt"></android.support.v7.widget.RecyclerView>
+
+
+    <ImageView
+        android:id="@+id/iv_home_listen"
+        android:layout_width="67pt"
+        android:layout_height="90pt"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20pt"
+        android:layout_marginRight="270pt"
+        android:src="@drawable/listen" />
+
+    <ImageView
+        android:id="@+id/iv_home_story"
+        android:layout_width="67pt"
+        android:layout_height="90pt"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20pt"
+        android:layout_marginRight="145pt"
+        android:src="@drawable/index_story" />
+
+    <ImageView
+        android:id="@+id/iv_home_music"
+        android:layout_width="67pt"
+        android:layout_height="90pt"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20pt"
+        android:layout_marginRight="24pt"
+        android:src="@drawable/index_music" />
+
+    <ImageView
+        android:id="@+id/iv_home_like"
+        android:layout_width="117pt"
+        android:layout_height="130pt"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="300pt"
+        android:layout_marginBottom="20pt"
+        android:src="@drawable/index_like" />
+
+    <ImageView
+        android:id="@+id/iv_home_time"
+        android:layout_width="117pt"
+        android:layout_height="130pt"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="160pt"
+        android:layout_marginBottom="20pt"
+        android:layout_toRightOf="@+id/iv_home_like"
+        android:src="@drawable/index_time" />
+
+    <ImageView
+        android:id="@+id/iv_home_download"
+        android:layout_width="117pt"
+        android:layout_height="130pt"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="160pt"
+        android:layout_marginBottom="20pt"
+        android:layout_toRightOf="@+id/iv_home_time"
+        android:src="@drawable/index_down" />
+
+    <ImageView
+        android:id="@+id/iv_home_type_music_story"
+        android:layout_width="212pt"
+        android:layout_height="212pt"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="30pt"
+        android:src="@drawable/home_tutu_10" />
+
+    <ImageView
+        android:id="@+id/iv_home_bird"
+        android:layout_width="73pt"
+        android:layout_height="73pt"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="130pt"
+        android:layout_marginBottom="100pt" />
+
+
+</RelativeLayout>

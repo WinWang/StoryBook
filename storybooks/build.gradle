@@ -1,0 +1,94 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+
+    useLibrary 'org.apache.http.legacy'
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId "com.winwang.storybooks"
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
+
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi', 'armeabi-v7a', 'x86'
+        }
+
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "USE_CANARY", "true"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            buildConfigField "boolean", "USE_CANARY", "false"
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+//    implementation 'me.jessyan:arms:2.5.0'
+    implementation 'me.jessyan:arms-imageloader-glide:2.5.0'
+    //view
+    implementation rootProject.ext.dependencies["autosize"]
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
+        exclude module: 'support-annotations'
+    }
+    //tools
+    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
+    //注意 Arms 核心库现在并不会依赖某个 EventBus, 要想使用 EventBus, 还请在项目中自行依赖对应的 EventBus
+    //现在支持两种 EventBus, greenrobot 的 EventBus 和畅销书 《Android源码设计模式解析与实战》的作者 何红辉 所作的 AndroidEventBus
+    //依赖后 Arms 会自动检测您依赖的 EventBus 并自动注册
+    //建议使用 AndroidEventBus, 特别是组件化项目, 原因请看 https://github.com/hehonghui/AndroidEventBus/issues/49
+    //这种做法可以让使用者有自行选择三方库的权利, 并且还可以减轻 Arms 的体积
+    implementation rootProject.ext.dependencies["androideventbus"]
+    //    implementation rootProject.ext.dependencies["eventbus"]
+    //test
+    debugImplementation rootProject.ext.dependencies["canary-debug"]
+    releaseImplementation rootProject.ext.dependencies["canary-release"]
+    testImplementation rootProject.ext.dependencies["canary-release"]
+    testImplementation rootProject.ext.dependencies["junit"]
+    implementation rootProject.ext.dependencies["QMUI"]
+    implementation rootProject.ext.dependencies["RVLayoutM"]
+    implementation rootProject.ext.dependencies["BRAVH"]
+    implementation rootProject.ext.dependencies["fastjson"]
+    implementation rootProject.ext.dependencies["blankJUtils"]
+    implementation rootProject.ext.dependencies["loading"]
+    implementation 'com.shuyu:GSYVideoPlayer:6.0.3'
+    implementation 'com.shuyu:gsyVideoPlayer-java:6.0.3'
+    implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.3'
+    implementation 'com.shuyu:gsyVideoPlayer-armv7a:6.0.3'
+    implementation 'com.shuyu:gsyVideoPlayer-arm64:6.0.3'
+    implementation 'com.shuyu:gsyVideoPlayer-x64:6.0.3'
+    implementation 'com.shuyu:gsyVideoPlayer-x86:6.0.3'
+    implementation('com.airbnb.android:lottie:2.2.5') {
+        exclude group: 'com.android.support'
+    }
+    implementation project(':MVP')
+}
