@@ -117,16 +117,6 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
         mPresenter.onCreate();
     }
 
-    @Override
-    public void onSuccess() {
-        mLoadService.showCallback(SuccessCallback.class);
-    }
-
-    @Override
-    public void onFail() {
-        showFail();
-    }
-
     private void initListener() {
         adapter.setOnItemClickListener(((adapter1, view, position) -> {
             int videoId = dataList.get(position).getVideoId();

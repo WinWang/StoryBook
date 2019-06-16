@@ -1,5 +1,8 @@
 package com.winwang.storybooks.app;
 
+import android.content.Context;
+import android.support.multidex.MultiDex;
+
 import com.jess.arms.base.BaseApplication;
 import com.kingja.loadsir.core.LoadSir;
 import com.winwang.storybooks.loadingcallback.CustomCallback;
@@ -48,5 +51,12 @@ public class MyApp extends BaseApplication {
                 .setSupportSP(false)
                 .setSupportSubunits(Subunits.PT);
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
 
 }

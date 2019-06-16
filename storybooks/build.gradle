@@ -17,7 +17,7 @@ android {
         versionCode rootProject.ext.android["versionCode"]
         versionName rootProject.ext.android["versionName"]
         testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
-
+        multiDexEnabled true
         ndk {
             //设置支持的SO库架构
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
@@ -40,6 +40,7 @@ android {
             shrinkResources true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
     }
 
@@ -80,6 +81,7 @@ dependencies {
     implementation rootProject.ext.dependencies["fastjson"]
     implementation rootProject.ext.dependencies["blankJUtils"]
     implementation rootProject.ext.dependencies["loading"]
+    implementation rootProject.ext.dependencies["multidex"]
     implementation 'com.shuyu:GSYVideoPlayer:6.0.3'
     implementation 'com.shuyu:gsyVideoPlayer-java:6.0.3'
     implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.3'

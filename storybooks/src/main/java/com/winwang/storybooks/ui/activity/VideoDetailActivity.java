@@ -67,10 +67,6 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
         mPresenter.getVideoDetail();
     }
 
-    @Override
-    public void onSuccess() {
-        showSuccess();
-    }
 
     @Override
     public void showLoading() {
@@ -82,10 +78,6 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
 
     }
 
-    @Override
-    public void onFail() {
-        showFail();
-    }
 
     @Override
     public void showMessage(@NonNull String message) {

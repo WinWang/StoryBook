@@ -58,7 +58,7 @@ public class SplashActivity extends BasesActivity<SplashPresenter> implements Sp
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-       mLoadService.showCallback(SuccessCallback.class);
+        mLoadService.showCallback(SuccessCallback.class);
     }
 
     @Override

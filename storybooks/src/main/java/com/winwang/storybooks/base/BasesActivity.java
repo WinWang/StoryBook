@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.mvp.IPresenter;
+import com.jess.arms.mvp.IView;
 import com.kingja.loadsir.callback.Callback;
 import com.kingja.loadsir.callback.SuccessCallback;
 import com.kingja.loadsir.core.Convertor;
@@ -19,7 +20,7 @@ import com.winwang.storybooks.loadingcallback.ErrorCallback;
  * Created by WinWang on 2019/6/16
  * Description->
  */
-public abstract class BasesActivity<P extends IPresenter> extends BaseActivity<P> {
+public abstract class BasesActivity<P extends IPresenter> extends BaseActivity<P> implements IView {
 
     protected LoadService mLoadService;
     private int SUCCESS_CODE = 0x00;
@@ -66,5 +67,13 @@ public abstract class BasesActivity<P extends IPresenter> extends BaseActivity<P
         mLoadService.showCallback(EmptyCallback.class);
     }
 
+    @Override
+    public void onSuccess() {
+        mLoadService.showSuccess();
+    }
 
+    @Override
+    public void onFail() {
+        mLoadService.showCallback(ErrorCallback.class);
+    }
 }
