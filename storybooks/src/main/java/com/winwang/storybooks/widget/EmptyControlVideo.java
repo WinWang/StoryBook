@@ -4,10 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
+import com.jess.arms.utils.ArmsUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.winwang.storybooks.R;
+import com.winwang.storybooks.interfaces.PlayCompleteListener;
 
 /**
  * 无任何控制ui的播放
@@ -18,6 +21,7 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
     ImageView cover;
     FrameLayout container;
     private boolean isFull = false;
+    private PlayCompleteListener mCompleteListener;
 
     public EmptyControlVideo(Context context, Boolean fullFlag) {
         super(context, fullFlag);
@@ -92,5 +96,35 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
 //        } else {
 //            startWindowFullscreen(getContext(), false, false);
 //        }
+    }
+
+    public void setOnCompleteListener(PlayCompleteListener listener) {
+        this.mCompleteListener = listener;
+    }
+
+
+    @Override
+    public void onAutoCompletion() {
+        super.onAutoCompletion();
+        if (mCompleteListener != null) {
+            mCompleteListener.onComplete();
+        }
+    }
+
+    @Override
+    public void onVideoPause() {
+        super.onVideoPause();
+        if(mCompleteListener!=null){
+            mCompleteListener.onPlayerPause();
+        }
+    }
+
+
+    @Override
+    public void onVideoResume() {
+        super.onVideoResume();
+        if(mCompleteListener!=null){
+            mCompleteListener.onPlayerPlay();
+        }
     }
 }

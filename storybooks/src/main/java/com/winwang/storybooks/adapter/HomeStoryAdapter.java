@@ -20,15 +20,21 @@ import java.util.List;
  */
 public class HomeStoryAdapter extends BaseQuickAdapter<StoryListBean.S1005Bean.Classlist1Bean, BaseViewHolder> {
 
+
+    private final RequestOptions mRequestOptions;
+
     public HomeStoryAdapter(int layoutResId, @Nullable List<StoryListBean.S1005Bean.Classlist1Bean> data) {
         super(layoutResId, data);
+        mRequestOptions = new RequestOptions();
+        mRequestOptions.placeholder(R.drawable.listen_zhanweifu);
+        mRequestOptions.error(R.drawable.listen_zhanweifu);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, StoryListBean.S1005Bean.Classlist1Bean item) {
         ImageView cover = (ImageView) helper.getView(R.id.iv_home_cover);
         helper.setText(R.id.tv_home_title, item.getName());
-        Glide.with(mContext).load(item.getPrintscreen()).apply(RequestOptions.bitmapTransform(new RoundedCorners(ArmsUtils.dip2px(mContext, 32)))).into(cover);
+        Glide.with(mContext).load(item.getPrintscreen()).apply(RequestOptions.bitmapTransform(new RoundedCorners(ArmsUtils.dip2px(mContext, 32)))).apply(mRequestOptions).into(cover);
 //        ImageConfigImpl.builder().url(item.getVideoImage()).imageRadius(20).imageView(cover).build();
     }
 }

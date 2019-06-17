@@ -33,7 +33,7 @@ public interface VideoDetailContract {
 
     //Model层定义接口,外部只需关心Model返回的数据,无需关心内部细节,即是否使用缓存
     interface Model extends IModel {
-        Observable<VideoDetailBean> getVideoDetail(RequestBody body);
+        Observable<VideoDetailBean> getVideoDetail(RequestBody body, String url);
 
         Observable<VideoBean> getVideoUrl(String url);
 

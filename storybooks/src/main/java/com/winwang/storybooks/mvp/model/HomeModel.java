@@ -10,11 +10,14 @@ import com.winwang.storybooks.entity.HomeListBean;
 import com.winwang.storybooks.entity.HomeReqBean;
 import com.winwang.storybooks.entity.StoryListBean;
 import com.winwang.storybooks.http.ApiService;
+import com.winwang.storybooks.http.CacheApi;
 import com.winwang.storybooks.mvp.contract.HomeContract;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictDynamicKey;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -52,9 +55,9 @@ public class HomeModel extends BaseModel implements HomeContract.Model {
 
     @Override
     public Observable<StoryListBean> getStoryList1(RequestBody body) {
-        Observable<StoryListBean> observable = mRepositoryManager
+        Observable<StoryListBean> observable = mRepositoryManager.obtainCacheService(CacheApi.class).getStoryList(mRepositoryManager
                 .obtainRetrofitService(ApiService.class)
-                .getStoryList1(body);
+                .getStoryList1(body), new DynamicKey("1"), new EvictDynamicKey(false));
         return observable;
     }
 }

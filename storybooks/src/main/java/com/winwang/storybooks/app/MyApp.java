@@ -5,6 +5,7 @@ import android.support.multidex.MultiDex;
 
 import com.jess.arms.base.BaseApplication;
 import com.kingja.loadsir.core.LoadSir;
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
 import com.winwang.storybooks.loadingcallback.CustomCallback;
 import com.winwang.storybooks.loadingcallback.EmptyCallback;
 import com.winwang.storybooks.loadingcallback.ErrorCallback;
@@ -13,6 +14,7 @@ import com.winwang.storybooks.loadingcallback.TimeoutCallback;
 
 import me.jessyan.autosize.AutoSizeConfig;
 import me.jessyan.autosize.unit.Subunits;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * Created by WinWang on 2019/6/6
@@ -25,6 +27,7 @@ public class MyApp extends BaseApplication {
         configUnits();
         super.onCreate();
         initLoding();
+        IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);//关闭IJKlog日志
     }
 
     /**

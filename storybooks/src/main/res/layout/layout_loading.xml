@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/ll_loading"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center">
+    android:id="@+id/ll_loading"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#C0EFFF"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <ProgressBar
-        android:layout_width="50pt"
-        android:layout_height="50pt"/>
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="90pt"
+        android:layout_height="90pt"
+        android:src="@drawable/loading" />
+
 
 </LinearLayout>

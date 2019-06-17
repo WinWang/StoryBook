@@ -26,7 +26,7 @@
         android:id="@+id/rbt_seconds"
         android:textColor="#fff"
         android:textSize="30pt"
-        app:qmui_backgroundColor="#F6999999"
+        app:qmui_backgroundColor="#30000000"
         app:qmui_borderColor="@color/qmui_config_color_transparent"
         app:qmui_radius="35pt" />
 

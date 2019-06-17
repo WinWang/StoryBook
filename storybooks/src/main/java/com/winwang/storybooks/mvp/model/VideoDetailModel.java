@@ -14,9 +14,12 @@ import com.winwang.storybooks.entity.StoryListBean;
 import com.winwang.storybooks.entity.VideoBean;
 import com.winwang.storybooks.entity.VideoDetailBean;
 import com.winwang.storybooks.http.ApiService;
+import com.winwang.storybooks.http.CacheApi;
 import com.winwang.storybooks.mvp.contract.VideoDetailContract;
 
 import io.reactivex.Observable;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictDynamicKey;
 import okhttp3.RequestBody;
 
 
@@ -52,18 +55,22 @@ public class VideoDetailModel extends BaseModel implements VideoDetailContract.M
     }
 
     @Override
-    public Observable<VideoDetailBean> getVideoDetail(RequestBody body) {
-        Observable<VideoDetailBean> observable = mRepositoryManager
-                .obtainRetrofitService(ApiService.class)
-                .getVideoDetail(body);
+    public Observable<VideoDetailBean> getVideoDetail(RequestBody body, String url) {
+        Observable<VideoDetailBean> observable = mRepositoryManager.obtainCacheService(CacheApi.class)
+                .getVideoDetail(mRepositoryManager
+                        .obtainRetrofitService(ApiService.class)
+                        .getVideoDetail(body), new DynamicKey(url), new EvictDynamicKey(false));
         return observable;
     }
 
     @Override
     public Observable<VideoBean> getVideoUrl(String url) {
-        Observable<VideoBean> observable = mRepositoryManager
+//        Observable<VideoBean> observable = mRepositoryManager.obtainCacheService(CacheApi.class)
+//                .getVideoDetailUrl(mRepositoryManager
+//                        .obtainRetrofitService(ApiService.class)
+//                        .getVideoUrl(url), new DynamicKey(url), new EvictDynamicKey(false));
+        return mRepositoryManager
                 .obtainRetrofitService(ApiService.class)
                 .getVideoUrl(url);
-        return observable;
     }
 }

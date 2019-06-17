@@ -84,7 +84,7 @@ public class VideoDetailPresenter extends BasePresenter<VideoDetailContract.Mode
         json.put("md", sign);
         String jsonString = json.toJSONString();
         RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), jsonString);
-        mModel.getVideoDetail(requestBody)
+        mModel.getVideoDetail(requestBody, mRootView.getVideoId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView))
@@ -120,6 +120,12 @@ public class VideoDetailPresenter extends BasePresenter<VideoDetailContract.Mode
                     @Override
                     public void onNext(VideoBean videoBean) {
                         mRootView.setVideoData(videoBean.getL());
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+
                     }
                 });
     }

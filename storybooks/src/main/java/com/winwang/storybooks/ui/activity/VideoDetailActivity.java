@@ -5,18 +5,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.winwang.storybooks.R;
 import com.winwang.storybooks.base.BasesActivity;
 import com.winwang.storybooks.di.component.DaggerVideoDetailComponent;
+import com.winwang.storybooks.interfaces.PlayCompleteListener;
 import com.winwang.storybooks.mvp.contract.VideoDetailContract;
 import com.winwang.storybooks.mvp.presenter.VideoDetailPresenter;
 import com.winwang.storybooks.widget.EmptyControlVideo;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -33,11 +38,25 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
-public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> implements VideoDetailContract.View, View.OnClickListener {
+public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> implements VideoDetailContract.View, GSYVideoProgressListener, SeekBar.OnSeekBarChangeListener, PlayCompleteListener {
 
     String videoId;
     @BindView(R.id.player_video)
     EmptyControlVideo playerVideo;
+    @BindView(R.id.iv_video_download)
+    ImageView ivVideoDownload;
+    @BindView(R.id.iv_video_like)
+    ImageView ivVideoLike;
+    @BindView(R.id.iv_video_comment)
+    ImageView ivVideoComment;
+    @BindView(R.id.iv_video_play)
+    ImageView ivVideoPlay;
+    @BindView(R.id.seek_progress)
+    SeekBar seekProgress;
+    @BindView(R.id.iv_video_voice)
+    ImageView ivVideoVoice;
+    private boolean seekTouch = false; //seekBar 触摸标记
+    private boolean playTag = true;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -58,8 +77,10 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
     public void initData(@Nullable Bundle savedInstanceState) {
         Intent intent = getIntent();
         videoId = intent.getStringExtra("videoId");
+        playerVideo.setGSYVideoProgressListener(this);
+        seekProgress.setOnSeekBarChangeListener(this);
+        playerVideo.setOnCompleteListener(this);
         mPresenter.getVideoDetail();
-        playerVideo.setOnClickListener(this);
     }
 
     @Override
@@ -121,16 +142,88 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
         super.onDestroy();
     }
 
-    @Override
-    public void onClick(View v) {
-        playerVideo.startWindowFullscreen(this, false, false);
-    }
-
     private GSYVideoPlayer getCurPlay() {
         if (playerVideo.getFullWindowPlayer() != null) {
             return playerVideo.getFullWindowPlayer();
         }
         return playerVideo;
+    }
+
+    /**
+     * 动态设置进度(监听)
+     *
+     * @param progress
+     * @param secProgress
+     * @param currentPosition
+     * @param duration
+     */
+    @Override
+    public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
+        if (!seekTouch) {
+            seekProgress.setMax(duration);
+            seekProgress.setProgress(currentPosition);
+        }
+    }
+
+
+    @OnClick({R.id.iv_video_download, R.id.iv_video_like, R.id.iv_video_comment, R.id.iv_video_play, R.id.iv_video_voice})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_video_download:
+                break;
+            case R.id.iv_video_like:
+                break;
+            case R.id.iv_video_comment:
+                break;
+            case R.id.iv_video_play:
+                if (playTag) {
+                    playerVideo.onVideoPause();
+                } else {
+                    playerVideo.onVideoResume();
+                }
+                break;
+            case R.id.iv_video_voice:
+                break;
+        }
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        seekTouch = true;
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        seekTouch = false;
+        int progress = seekBar.getProgress();
+        getCurPlay().seekTo(progress);
+    }
+
+    /**
+     * 播放完成的回调
+     */
+    @Override
+    public void onComplete() {
+        seekProgress.setProgress(0);
+        ivVideoPlay.setImageResource(R.drawable.play_play);
+        playTag = false;
+    }
+
+    @Override
+    public void onPlayerPause() {
+        ivVideoPlay.setImageResource(R.drawable.play_play);
+        playTag = false;
+    }
+
+    @Override
+    public void onPlayerPlay() {
+        ivVideoPlay.setImageResource(R.drawable.play_suspend);
+        playTag = true;
     }
 
 }
