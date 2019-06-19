@@ -60,6 +60,9 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"></activity>
 
+        <service android:name=".service.PlayService"/>
+
+
     </application>
 
 </manifest>

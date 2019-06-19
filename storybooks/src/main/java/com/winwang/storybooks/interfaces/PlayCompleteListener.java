@@ -11,4 +11,9 @@ public interface PlayCompleteListener {
 
     void onPlayerPlay();
 
+    default void onUIClick() {
+
+    }
+
+
 }

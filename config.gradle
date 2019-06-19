@@ -96,9 +96,12 @@ ext {
             "QMUI"                     : 'com.qmuiteam:qmui:1.2.0',
             "RVLayoutM"                : 'rouchuan.viewpagerlayoutmanager:viewpagerlayoutmanager:2.0.22',
             "BRAVH"                    : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46',
-            fastjson                   : 'com.alibaba:fastjson:1.2.5',
+            "fastjson"                 : 'com.alibaba:fastjson:1.2.5',
             "blankJUtils"              : 'com.blankj:utilcode:1.24.2', //通用强大工具类
             "gsyPlayer"                : 'com.shuyu:GSYVideoPlayer:6.0.3',
+            "Arouter"                  : 'com.alibaba:arouter-api:1.5.0',
+            "ArouterApt"               : 'com.alibaba:arouter-compiler:1.2.2',
+            "aspectJ"                  : 'org.aspectj:aspectjrt:1.8.13',
 
             //test
             "junit"                    : "junit:junit:4.12",

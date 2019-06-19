@@ -5,5 +5,7 @@ package com.winwang.storybooks;
  * Description->
  */
 public class AppConfig {
+    public static final boolean Debug = true;
+
     public static final String MD5_KEY = "0102030405060708"; //请求的MD5加密串
 }

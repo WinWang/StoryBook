@@ -11,18 +11,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-import com.kingja.loadsir.callback.SuccessCallback;
 import com.leochuan.CenterSnapHelper;
 import com.leochuan.CircleScaleLayoutManager;
 import com.winwang.storybooks.R;
 import com.winwang.storybooks.adapter.HomeStoryAdapter;
 import com.winwang.storybooks.base.BasesActivity;
+import com.winwang.storybooks.common.RouterUrl;
 import com.winwang.storybooks.di.component.DaggerHomeComponent;
 import com.winwang.storybooks.entity.StoryListBean;
+import com.winwang.storybooks.event.MusicEvent;
 import com.winwang.storybooks.mvp.contract.HomeContract;
 import com.winwang.storybooks.mvp.presenter.HomePresenter;
+import com.winwang.storybooks.service.PlayService;
+import com.winwang.storybooks.utils.ExoMediaPlayer;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -48,6 +55,8 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
+
+@Route(path = RouterUrl.HOME_URL)
 public class HomeActivity extends BasesActivity<HomePresenter> implements HomeContract.View {
 
 
@@ -77,6 +86,7 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
     private boolean isStory = true;
     @Inject
     List<StoryListBean.S1005Bean.Classlist1Bean> dataList;
+    private ExoMediaPlayer mExoMediaPlayer;
 
 
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -110,6 +120,7 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
         initListener();
 //        ViewCompat.animate(ivHomeBird).setDuration(3000).translationY(-200).setInterpolator(new CycleInterpolator(Integer.MAX_VALUE)).start();
 
+
     }
 
     @Override
@@ -120,13 +131,13 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
     private void initListener() {
         adapter.setOnItemClickListener(((adapter1, view, position) -> {
             int videoId = dataList.get(position).getVideoId();
-            Intent intent = new Intent(HomeActivity.this, VideoDetailActivity.class);
-            intent.putExtra("videoId", videoId + "");
-            launchActivity(intent);
+            String name = dataList.get(position).getName();
+            ARouter.getInstance().build(RouterUrl.VIDEO_DETAIL_URL)
+                    .withString("videoId", videoId + "")
+                    .withString("name", name)
+                    .navigation();
         }));
     }
-
-
 
 
     @Override
@@ -171,7 +182,11 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
             case R.id.iv_home_download:
                 break;
             case R.id.iv_home_type_music_story:
+                if (mExoMediaPlayer == null) {
+                    mExoMediaPlayer = new ExoMediaPlayer(this);
+                }
                 if (isStory) {
+                    mExoMediaPlayer.playSoundSingle(R.raw.erge);
                     ivHomeTypeMusicStory.setImageResource(R.drawable.music_anim);
                     mPresenter.changeList(true);
                     if (dataList.size() > 0) {
@@ -179,6 +194,7 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
                         rvHome.smoothScrollToPosition(1);
                     }
                 } else {
+                    mExoMediaPlayer.playSoundSingle(R.raw.gushi);
                     ivHomeTypeMusicStory.setImageResource(R.drawable.story_anim);
                     mPresenter.changeList(false);
                     if (dataList.size() > 0) {
@@ -202,5 +218,26 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
     public Resources getResources() {
         AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));
         return super.getResources();
+    }
+
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(this, PlayService.class));
+        if (mExoMediaPlayer != null) {
+            mExoMediaPlayer.release();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().post(new MusicEvent("homePause"));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().post(new MusicEvent("homePlay"));
     }
 }

@@ -3,9 +3,11 @@ package com.winwang.storybooks.app;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.jess.arms.base.BaseApplication;
 import com.kingja.loadsir.core.LoadSir;
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
+import com.winwang.storybooks.AppConfig;
 import com.winwang.storybooks.loadingcallback.CustomCallback;
 import com.winwang.storybooks.loadingcallback.EmptyCallback;
 import com.winwang.storybooks.loadingcallback.ErrorCallback;
@@ -28,6 +30,15 @@ public class MyApp extends BaseApplication {
         super.onCreate();
         initLoding();
         IjkPlayerManager.setLogLevel(IjkMediaPlayer.IJK_LOG_SILENT);//关闭IJKlog日志
+        initArouter();
+    }
+
+    private void initArouter() {
+        if (AppConfig.Debug) {           // 这两行必须写在init之前，否则这些配置在init过程中将无效
+            ARouter.openLog();     // 打印日志
+            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+        }
+        ARouter.init(this); // 尽可能早，推荐在Application中初始化
     }
 
     /**

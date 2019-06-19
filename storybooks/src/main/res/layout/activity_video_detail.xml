@@ -6,6 +6,7 @@
     android:background="@drawable/play_bg"
     android:orientation="vertical">
 
+    <include layout="@layout/layout_head_top_bar"/>
 
     <FrameLayout
         android:layout_width="1041pt"

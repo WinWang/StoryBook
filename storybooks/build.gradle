@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
 
@@ -22,6 +21,13 @@ android {
             //设置支持的SO库架构
             abiFilters 'armeabi', 'armeabi-v7a', 'x86'
         }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
 
     }
 
@@ -49,6 +55,14 @@ android {
         disable "ResourceType"
         abortOnError false
     }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+        keepRuntimeAnnotatedClasses false
+        additionalParameters += '--minimal-main-dex'
+        additionalParameters += '--set-max-idx-number=50000'
+    }
+
 }
 
 dependencies {
@@ -68,8 +82,8 @@ dependencies {
     //依赖后 Arms 会自动检测您依赖的 EventBus 并自动注册
     //建议使用 AndroidEventBus, 特别是组件化项目, 原因请看 https://github.com/hehonghui/AndroidEventBus/issues/49
     //这种做法可以让使用者有自行选择三方库的权利, 并且还可以减轻 Arms 的体积
-    implementation rootProject.ext.dependencies["androideventbus"]
-    //    implementation rootProject.ext.dependencies["eventbus"]
+//    implementation rootProject.ext.dependencies["androideventbus"]
+    implementation rootProject.ext.dependencies["eventbus"]
     //test
     debugImplementation rootProject.ext.dependencies["canary-debug"]
     releaseImplementation rootProject.ext.dependencies["canary-release"]
@@ -83,6 +97,8 @@ dependencies {
     implementation rootProject.ext.dependencies["loading"]
     implementation rootProject.ext.dependencies["multidex"]
     implementation rootProject.ext.dependencies["gif"]
+    implementation rootProject.ext.dependencies["aspectJ"]
+    annotationProcessor rootProject.ext.dependencies["ArouterApt"]
     implementation 'com.shuyu:GSYVideoPlayer:6.0.3'
     implementation 'com.shuyu:gsyVideoPlayer-java:6.0.3'
     implementation 'com.shuyu:GSYVideoPlayer-exo2:6.0.3'

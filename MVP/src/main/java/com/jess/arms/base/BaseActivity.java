@@ -26,6 +26,7 @@ import android.util.AttributeSet;
 import android.view.InflateException;
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.jess.arms.base.delegate.IActivity;
 import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.CacheType;
@@ -62,7 +63,7 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     private final BehaviorSubject<ActivityEvent> mLifecycleSubject = BehaviorSubject.create();
     private Cache<String, Object> mCache;
     private Unbinder mUnbinder;
-    private Activity mContext;
+    public Activity mContext;
     @Inject
     @Nullable
     protected P mPresenter;//如果当前页面逻辑简单, Presenter 可以为 null
@@ -98,17 +99,24 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
             if (layoutResID != 0) {
                 setContentView(layoutResID);
                 //绑定到butterknife
+                initTopBar();
+                setLoadingLayout(savedInstanceState);
                 mUnbinder = ButterKnife.bind(this);
             }
         } catch (Exception e) {
             if (e instanceof InflateException) throw e;
             e.printStackTrace();
         }
-        setLoadingLayout(savedInstanceState);
+        if (registerArouter()) {
+            ARouter.getInstance().inject(this);
+        }
         initData(savedInstanceState);
     }
 
     protected abstract void setLoadingLayout(@Nullable Bundle savedInstanceState);
+
+    protected abstract void initTopBar();
+
 
     @Override
     protected void onDestroy() {
@@ -144,6 +152,11 @@ public abstract class BaseActivity<P extends IPresenter> extends AppCompatActivi
     @Override
     public boolean useFragment() {
         return true;
+    }
+
+
+    public boolean registerArouter() {
+        return false;
     }
 
 

@@ -4,13 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
-import com.jess.arms.utils.ArmsUtils;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.winwang.storybooks.R;
 import com.winwang.storybooks.interfaces.PlayCompleteListener;
+import com.winwang.storybooks.ui.activity.VideoDetailActivity;
 
 /**
  * 无任何控制ui的播放
@@ -20,12 +20,14 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
 
     ImageView cover;
     FrameLayout container;
-    private boolean isFull = false;
+    private boolean isFull = true;
     private PlayCompleteListener mCompleteListener;
+    float x;
+    float y;
+    long timeDurationStart;
+    long timeDurationEnd;
+    private Context context;
 
-    public EmptyControlVideo(Context context, Boolean fullFlag) {
-        super(context, fullFlag);
-    }
 
     public EmptyControlVideo(Context context) {
         super(context);
@@ -34,6 +36,7 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
     public EmptyControlVideo(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
 
     @Override
     public int getLayoutId() {
@@ -46,7 +49,18 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
         super.init(context);
         cover = (ImageView) findViewById(R.id.iv_cover_video);
         container = (FrameLayout) findViewById(R.id.surface_container);
-
+        this.context = context;
+//        container.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (isFull) {
+//                    GSYVideoManager.backFromWindowFull(context);
+//                } else {
+//                    startWindowFullscreen(context, false, false);
+//                }
+//                isFull = !isFull;
+//            }
+//        });
     }
 
     @Override
@@ -60,14 +74,32 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
 
         //不给触摸亮度，如果需要，屏蔽下方代码即可
 //        mBrightness = false;
+        System.out.println(">>>>>>X" + absDeltaX + ">>>>>>>>Y" + absDeltaY);
     }
 
     @Override
     protected void touchDoubleUp() {
-//        super.touchDoubleUp();
+        super.touchDoubleUp();
         //不需要双击暂停
     }
 
+    @Override
+    protected void touchSurfaceDown(float x, float y) {
+        super.touchSurfaceDown(x, y);
+        timeDurationStart = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void touchSurfaceUp() {
+        super.touchSurfaceUp();
+        if (System.currentTimeMillis() - timeDurationStart < 300) {
+            if ( GSYVideoManager.isFullState((VideoDetailActivity)context)) {
+                GSYVideoManager.backFromWindowFull(context);
+            } else {
+                startWindowFullscreen(context, false, false);
+            }
+        }
+    }
 
     public void loadCoverImage(String url) {
         Glide.with(getContext().getApplicationContext())
@@ -98,6 +130,7 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
 //        }
     }
 
+
     public void setOnCompleteListener(PlayCompleteListener listener) {
         this.mCompleteListener = listener;
     }
@@ -114,7 +147,7 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
     @Override
     public void onVideoPause() {
         super.onVideoPause();
-        if(mCompleteListener!=null){
+        if (mCompleteListener != null) {
             mCompleteListener.onPlayerPause();
         }
     }
@@ -123,7 +156,7 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
     @Override
     public void onVideoResume() {
         super.onVideoResume();
-        if(mCompleteListener!=null){
+        if (mCompleteListener != null) {
             mCompleteListener.onPlayerPlay();
         }
     }

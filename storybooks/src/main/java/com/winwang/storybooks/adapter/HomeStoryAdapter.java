@@ -34,7 +34,7 @@ public class HomeStoryAdapter extends BaseQuickAdapter<StoryListBean.S1005Bean.C
     protected void convert(BaseViewHolder helper, StoryListBean.S1005Bean.Classlist1Bean item) {
         ImageView cover = (ImageView) helper.getView(R.id.iv_home_cover);
         helper.setText(R.id.tv_home_title, item.getName());
-        Glide.with(mContext).load(item.getPrintscreen()).apply(RequestOptions.bitmapTransform(new RoundedCorners(ArmsUtils.dip2px(mContext, 32)))).apply(mRequestOptions).into(cover);
+        Glide.with(mContext).load(item.getPrintscreen()).apply(mRequestOptions).apply(RequestOptions.bitmapTransform(new RoundedCorners(ArmsUtils.dip2px(mContext, 32)))).into(cover);
 //        ImageConfigImpl.builder().url(item.getVideoImage()).imageRadius(20).imageView(cover).build();
     }
 }

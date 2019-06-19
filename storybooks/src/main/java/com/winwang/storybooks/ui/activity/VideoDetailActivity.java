@@ -8,12 +8,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
+import com.jess.arms.utils.LogUtils;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.winwang.storybooks.R;
 import com.winwang.storybooks.base.BasesActivity;
+import com.winwang.storybooks.common.RouterUrl;
 import com.winwang.storybooks.di.component.DaggerVideoDetailComponent;
 import com.winwang.storybooks.interfaces.PlayCompleteListener;
 import com.winwang.storybooks.mvp.contract.VideoDetailContract;
@@ -38,9 +43,10 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
  * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
  * ================================================
  */
+
+@Route(path = RouterUrl.VIDEO_DETAIL_URL)
 public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> implements VideoDetailContract.View, GSYVideoProgressListener, SeekBar.OnSeekBarChangeListener, PlayCompleteListener {
 
-    String videoId;
     @BindView(R.id.player_video)
     EmptyControlVideo playerVideo;
     @BindView(R.id.iv_video_download)
@@ -57,6 +63,15 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
     ImageView ivVideoVoice;
     private boolean seekTouch = false; //seekBar 触摸标记
     private boolean playTag = true;
+    private boolean hasComplete = false;
+    private boolean fullTag = true;
+    /**
+     * Arouter 获取参数
+     */
+    @Autowired(name = "videoId")
+    String videoId;
+    @Autowired(name = "name")
+    String name;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -75,10 +90,9 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        Intent intent = getIntent();
-        videoId = intent.getStringExtra("videoId");
-        playerVideo.setGSYVideoProgressListener(this);
+        setTitle(name);
         seekProgress.setOnSeekBarChangeListener(this);
+        playerVideo.setGSYVideoProgressListener(this);
         playerVideo.setOnCompleteListener(this);
         mPresenter.getVideoDetail();
     }
@@ -90,21 +104,10 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
 
 
     @Override
-    public void showLoading() {
-
+    public boolean registerArouter() {
+        return true;
     }
 
-    @Override
-    public void hideLoading() {
-
-    }
-
-
-    @Override
-    public void showMessage(@NonNull String message) {
-        checkNotNull(message);
-        ArmsUtils.snackbarText(message);
-    }
 
     @Override
     public void launchActivity(@NonNull Intent intent) {
@@ -124,10 +127,10 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
 
     @Override
     public void setVideoData(String url) {
-        playerVideo.setOnClick(false);
         playerVideo.setUp(url, true, "");
         playerVideo.startPlayLogic();
-//        playerVideo.startWindowFullscreen(this, true, true);
+        playerVideo.setRotateViewAuto(false);
+        playerVideo.startWindowFullscreen(this, false, false);
     }
 
     @Override
@@ -179,7 +182,13 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
                 if (playTag) {
                     playerVideo.onVideoPause();
                 } else {
-                    playerVideo.onVideoResume();
+                    if (hasComplete) {
+                        playerVideo.startPlayLogic();
+                        playerVideo.onVideoResume();
+                        hasComplete = false;
+                    } else {
+                        playerVideo.onVideoResume();
+                    }
                 }
                 break;
             case R.id.iv_video_voice:
@@ -211,19 +220,24 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
     public void onComplete() {
         seekProgress.setProgress(0);
         ivVideoPlay.setImageResource(R.drawable.play_play);
+        hasComplete = true;
         playTag = false;
+        LogUtils.debugInfo(">>>>>>播放完成");
     }
 
     @Override
     public void onPlayerPause() {
         ivVideoPlay.setImageResource(R.drawable.play_play);
         playTag = false;
+        LogUtils.debugInfo(">>>>>>播放暂停");
     }
 
     @Override
     public void onPlayerPlay() {
         ivVideoPlay.setImageResource(R.drawable.play_suspend);
         playTag = true;
+        LogUtils.debugInfo(">>>>>>播放开始");
     }
+
 
 }

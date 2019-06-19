@@ -101,6 +101,12 @@ public class VideoDetailPresenter extends BasePresenter<VideoDetailContract.Mode
                             ArmsUtils.snackbarText(videoDetailBean.getMessage());
                         }
                     }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        super.onError(t);
+                        mRootView.onFail();
+                    }
                 });
 
 
@@ -125,7 +131,7 @@ public class VideoDetailPresenter extends BasePresenter<VideoDetailContract.Mode
                     @Override
                     public void onError(Throwable t) {
                         super.onError(t);
-
+                        mRootView.onFail();
                     }
                 });
     }
