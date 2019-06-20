@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.winwang.storybooks">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,9 +15,11 @@
         android:name=".app.MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:hardwareAccelerated="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:label,android:allowBackup">
 
         <!-- 解决无法debug安装包的问题 -->
         <uses-library
