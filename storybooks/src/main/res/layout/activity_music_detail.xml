@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/play_bg">
+
+    <include layout="@layout/layout_head_top_bar" />
+
+
+    <RelativeLayout
+        android:layout_width="926pt"
+        android:layout_height="622pt"
+        android:layout_marginLeft="100pt"
+        android:layout_marginTop="130pt"
+        android:background="@drawable/radio2">
+
+        <RelativeLayout
+            android:layout_width="842pt"
+            android:layout_height="392pt"
+            android:layout_marginLeft="20pt"
+            android:layout_marginTop="80pt">
+
+            <FrameLayout
+                android:layout_width="315pt"
+                android:layout_height="315pt"
+                android:layout_marginLeft="84pt"
+                android:layout_marginTop="35pt">
+
+                <FrameLayout
+                    android:id="@+id/fl_radio_animate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/iv_radio_cover"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/radio_cd_shibai" />
+
+                </FrameLayout>
+
+                <ImageView
+                    android:id="@+id/iv_radio_mask"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/radio3"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/radio" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="730pt"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="70pt"
+
+            android:layout_marginBottom="65pt"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_video_play"
+                android:layout_width="67pt"
+                android:layout_height="68pt"
+                android:src="@drawable/play_suspend" />
+
+            <SeekBar
+                android:id="@+id/seek_progress"
+                style="@android:style/Widget.Holo.SeekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20pt"
+                android:layout_marginRight="20pt"
+                android:layout_weight="1"
+                android:maxHeight="18pt"
+                android:minHeight="18pt"
+                android:progress="0"
+                android:progressDrawable="@drawable/seek_progress_back"
+                android:splitTrack="false"
+                android:thumb="@drawable/seek_thumb"
+                android:thumbOffset="5dp" />
+
+            <ImageView
+                android:id="@+id/iv_video_voice"
+                android:layout_width="67pt"
+                android:layout_height="74pt"
+                android:src="@drawable/play_voice" />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="198pt"
+        android:layout_height="339pt"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="30pt"
+        android:layout_marginBottom="60pt"
+        android:src="@drawable/play_bear" />
+
+
+</RelativeLayout>

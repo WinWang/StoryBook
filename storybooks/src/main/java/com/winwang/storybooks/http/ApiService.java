@@ -1,5 +1,8 @@
 package com.winwang.storybooks.http;
 
+import com.winwang.storybooks.entity.AudioDetailBean;
+import com.winwang.storybooks.entity.MusicHomeBean;
+import com.winwang.storybooks.entity.MusicListBean;
 import com.winwang.storybooks.entity.StoryListBean;
 import com.winwang.storybooks.entity.VideoBean;
 import com.winwang.storybooks.entity.VideoDetailBean;
@@ -40,6 +43,34 @@ public interface ApiService {
 
     @GET
     Observable<VideoBean> getVideoUrl(@Url String url);
+
+    /**
+     * 获取听音乐分类
+     *
+     * @param body
+     * @return
+     */
+    @POST("/")
+    Observable<MusicHomeBean> getMusicHome(@Body RequestBody body);
+
+    /**
+     * 获取分类音乐列表数据
+     *
+     * @param body
+     * @return
+     */
+    @POST("/")
+    Observable<MusicListBean> getMusicList(@Body RequestBody body);
+
+
+    /**
+     * 获取音频详情
+     *
+     * @param body
+     * @return
+     */
+    @POST("/")
+    Observable<AudioDetailBean> getAudioDetail(@Body RequestBody body);
 
 
 }

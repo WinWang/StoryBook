@@ -88,7 +88,7 @@
                 android:progressDrawable="@drawable/seek_progress_back"
                 android:splitTrack="false"
                 android:thumb="@drawable/seek_thumb"
-                android:thumbOffset="0dp" />
+                android:thumbOffset="5dp" />
 
             <ImageView
                 android:id="@+id/iv_video_voice"

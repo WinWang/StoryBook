@@ -170,6 +170,8 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_home_listen:
+                ARouter.getInstance().build(RouterUrl.MUSIC_HOME)
+                        .navigation();
                 break;
             case R.id.iv_home_story:
                 break;

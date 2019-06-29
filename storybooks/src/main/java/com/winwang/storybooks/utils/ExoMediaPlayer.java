@@ -2,6 +2,7 @@ package com.winwang.storybooks.utils;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -10,6 +11,7 @@ import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -111,6 +113,15 @@ public class ExoMediaPlayer {
     }
 
 
+    public long getDuration() {
+        return mPlayer.getDuration();
+    }
+
+    public long getCurrentPos() {
+        return mPlayer.getCurrentPosition();
+    }
+
+
     /**
      * 回调监听
      */
@@ -123,11 +134,20 @@ public class ExoMediaPlayer {
 
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-            if (playbackState == 4) {
+
+            System.out.println(">>>>>" + playbackState);
+
+            if (playbackState == 4) { //结束
                 lister.onComplete();
+            } else if (playbackState == 2) { //加载中
+                lister.onLoading();
+            } else if (playbackState == 3) { //准备完成
+                lister.onReady();
             }
             super.onPlayerStateChanged(playWhenReady, playbackState);
         }
+
+
     }
 
     /**
@@ -135,6 +155,15 @@ public class ExoMediaPlayer {
      */
     public interface ExoOnCompleterLister {
         void onComplete();
+
+
+        default void onReady() {
+        }
+
+        default void onLoading() {
+        }
+
+
     }
 
 

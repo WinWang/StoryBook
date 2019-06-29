@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <FrameLayout
+        android:layout_width="365pt"
+        android:layout_height="508pt"
+        android:layout_marginLeft="35pt"
+        android:layout_marginRight="35pt">
+
+
+        <ImageView
+            android:id="@+id/iv_music_home_box"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/listen_zhanweifu" />
+
+        <ImageView
+            android:id="@+id/iv_music_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/list_kuang" />
+
+        <TextView
+            android:id="@+id/tv_music_home_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50pt"
+            android:text="hahah"
+            android:textColor="#fff"
+            android:textSize="32pt"
+            android:textStyle="bold" />
+
+
+    </FrameLayout>
+
+
+</FrameLayout>
