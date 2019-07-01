@@ -121,6 +121,19 @@ public class ExoMediaPlayer {
         return mPlayer.getCurrentPosition();
     }
 
+    public void setCurrentPos(long pos) {
+        if (mPlayer != null) {
+            mPlayer.seekTo(pos);
+        }
+    }
+
+
+    public void restart() {
+        if (mPlayer != null) {
+            mPlayer.prepare(firstSource);
+        }
+    }
+
 
     /**
      * 回调监听
@@ -134,7 +147,6 @@ public class ExoMediaPlayer {
 
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
             System.out.println(">>>>>" + playbackState);
 
             if (playbackState == 4) { //结束
@@ -146,7 +158,6 @@ public class ExoMediaPlayer {
             }
             super.onPlayerStateChanged(playWhenReady, playbackState);
         }
-
 
     }
 

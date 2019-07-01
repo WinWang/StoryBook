@@ -7,29 +7,29 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.EncryptUtils;
-import com.jess.arms.integration.AppManager;
 import com.jess.arms.di.scope.ActivityScope;
-import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.http.imageloader.ImageLoader;
-
-import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subscribers.ResourceSubscriber;
-import me.jessyan.rxerrorhandler.core.RxErrorHandler;
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-
-import javax.inject.Inject;
-
+import com.jess.arms.integration.AppManager;
+import com.jess.arms.mvp.BasePresenter;
+import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 import com.winwang.storybooks.AppConfig;
 import com.winwang.storybooks.entity.AudioDetailBean;
 import com.winwang.storybooks.mvp.contract.MusicDetailContract;
 
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 
 /**
@@ -54,6 +54,7 @@ public class MusicDetailPresenter extends BasePresenter<MusicDetailContract.Mode
     ImageLoader mImageLoader;
     @Inject
     AppManager mAppManager;
+
 
     @Inject
     public MusicDetailPresenter(MusicDetailContract.Model model, MusicDetailContract.View rootView) {
@@ -108,19 +109,25 @@ public class MusicDetailPresenter extends BasePresenter<MusicDetailContract.Mode
 
 
     public void setTimeUpdate() {
-        Flowable.interval(0, 700, TimeUnit.MILLISECONDS)
+        Observable.interval(0, 700, TimeUnit.MILLISECONDS)
                 .compose(RxLifecycleUtils.bindToLifecycle(mRootView)) //在声明周期的完成以后销毁
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .unsubscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ResourceSubscriber<Long>() {
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDispose(d);
+                    }
+
                     @Override
                     public void onNext(Long aLong) {
+                        LogUtils.debugInfo(">>>>>>>>" + aLong);
                         mRootView.updateTime();
                     }
 
                     @Override
-                    public void onError(Throwable t) {
+                    public void onError(Throwable e) {
 
                     }
 
@@ -129,6 +136,13 @@ public class MusicDetailPresenter extends BasePresenter<MusicDetailContract.Mode
 
                     }
                 });
+
+
+    }
+
+
+    public void stopInterval() {
+        unDispose();
     }
 
 

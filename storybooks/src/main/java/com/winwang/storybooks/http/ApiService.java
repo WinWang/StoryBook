@@ -3,6 +3,7 @@ package com.winwang.storybooks.http;
 import com.winwang.storybooks.entity.AudioDetailBean;
 import com.winwang.storybooks.entity.MusicHomeBean;
 import com.winwang.storybooks.entity.MusicListBean;
+import com.winwang.storybooks.entity.StoryInListBean;
 import com.winwang.storybooks.entity.StoryListBean;
 import com.winwang.storybooks.entity.VideoBean;
 import com.winwang.storybooks.entity.VideoDetailBean;
@@ -72,5 +73,14 @@ public interface ApiService {
     @POST("/")
     Observable<AudioDetailBean> getAudioDetail(@Body RequestBody body);
 
+
+    /**
+     * 获取故事列表(里面的)
+     *
+     * @param body
+     * @return
+     */
+    @POST("/")
+    Observable<StoryInListBean> getInStoryList(@Body RequestBody body);
 
 }

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -13,7 +15,6 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-import com.jess.arms.utils.RxLifecycleUtils;
 import com.qmuiteam.qmui.widget.QMUITopBar;
 import com.winwang.storybooks.R;
 import com.winwang.storybooks.base.BasesActivity;
@@ -23,14 +24,8 @@ import com.winwang.storybooks.mvp.contract.MusicDetailContract;
 import com.winwang.storybooks.mvp.presenter.MusicDetailPresenter;
 import com.winwang.storybooks.utils.ExoMediaPlayer;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
-import io.reactivex.subscribers.ResourceSubscriber;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -50,8 +45,7 @@ import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 
 @Route(path = RouterUrl.AUDIO_DETAIL_URL)
-public class MusicDetailActivity extends BasesActivity<MusicDetailPresenter> implements MusicDetailContract.View {
-
+public class MusicDetailActivity extends BasesActivity<MusicDetailPresenter> implements MusicDetailContract.View, SeekBar.OnSeekBarChangeListener {
     @Autowired(name = "audioId")
     String audioId;
     @Autowired(name = "title")
@@ -73,6 +67,10 @@ public class MusicDetailActivity extends BasesActivity<MusicDetailPresenter> imp
     ImageView ivVideoVoice;
     private ExoMediaPlayer mExoMediaPlayer;
     private boolean isPlaying = false;
+    private boolean hasInit = false;
+    private Animation mAnimation;
+    private boolean hasTouchSeek = false;
+    private boolean hasComplete = false;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -93,6 +91,7 @@ public class MusicDetailActivity extends BasesActivity<MusicDetailPresenter> imp
     public void initData(@Nullable Bundle savedInstanceState) {
         setTitle(title);
         mPresenter.getAudioDetail(audioId);
+        seekProgress.setOnSeekBarChangeListener(this);
     }
 
     @Override
@@ -128,16 +127,23 @@ public class MusicDetailActivity extends BasesActivity<MusicDetailPresenter> imp
         mExoMediaPlayer.playSound(url, new ExoMediaPlayer.ExoOnCompleterLister() {
             @Override
             public void onComplete() {
+                hasComplete = true;
                 isPlaying = false;
                 ivVideoPlay.setImageResource(R.drawable.play_play);
+                mPresenter.stopInterval();
+                seekProgress.setProgress(0);
+                if (mAnimation != null) {
+                    mAnimation.cancel();
+                }
+                ivRadioCover.setImageResource(R.drawable.radio_cd_shibai);
+                hasInit = false;
                 System.out.println(">>>>>>>>>Complete");
             }
 
             @Override
             public void onLoading() {
-                isPlaying = true;
+                hasComplete = false;
                 ivVideoPlay.setImageResource(R.drawable.play_suspend);
-
                 System.out.println(">>>>>>>>>loading");
             }
 
@@ -145,17 +151,28 @@ public class MusicDetailActivity extends BasesActivity<MusicDetailPresenter> imp
             @Override
             public void onReady() {
                 System.out.println(">>>>>>>>>Ready");
-                long duration = mExoMediaPlayer.getDuration();
-                seekProgress.setMax((int) duration);
-                mPresenter.setTimeUpdate();
+                if (!hasInit) {
+                    ivRadioMask.setVisibility(View.VISIBLE);
+                    ivRadioCover.setImageResource(R.drawable.radio_cd_fengmian);
+                    mAnimation = AnimationUtils.loadAnimation(mContext, R.anim.civ_rotate_animate);
+                    flRadioAnimate.startAnimation(mAnimation);
+                    long duration = mExoMediaPlayer.getDuration();
+                    seekProgress.setMax((int) duration);
+                    isPlaying = true;
+                    mPresenter.setTimeUpdate();
+                }
+                hasInit = true;
+
             }
         });
     }
 
     @Override
     public void updateTime() {
-        long currentPos = mExoMediaPlayer.getCurrentPos();
-        seekProgress.setProgress((int) currentPos);
+        if (!hasTouchSeek) {
+            long currentPos = mExoMediaPlayer.getCurrentPos();
+            seekProgress.setProgress((int) currentPos);
+        }
     }
 
     @Override
@@ -172,15 +189,41 @@ public class MusicDetailActivity extends BasesActivity<MusicDetailPresenter> imp
             case R.id.iv_video_play:
                 if (isPlaying) {
                     ivVideoPlay.setImageResource(R.drawable.play_play);
+                    mPresenter.stopInterval();
                     mExoMediaPlayer.pause();
                 } else {
-                    mExoMediaPlayer.play();
-                    ivVideoPlay.setImageResource(R.drawable.play_suspend);
+                    if (hasComplete) {
+                        mExoMediaPlayer.restart();
+                    } else {
+                        mExoMediaPlayer.play();
+                        mPresenter.setTimeUpdate();
+                        ivVideoPlay.setImageResource(R.drawable.play_suspend);
+                    }
                 }
                 isPlaying = !isPlaying;
                 break;
             case R.id.iv_video_voice:
+
                 break;
         }
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (isPlaying) {
+            mExoMediaPlayer.setCurrentPos(progress);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        System.out.println("startTrack>>>>>>");
+        hasTouchSeek = true;
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        System.out.println("stopTrack>>>>>>");
+        hasTouchSeek = false;
     }
 }

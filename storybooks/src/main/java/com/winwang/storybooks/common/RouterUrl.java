@@ -10,4 +10,5 @@ public class RouterUrl {
     public static final String AUDIO_DETAIL_URL = "/app/audioDetail"; //音频详情页
     public static final String MUSIC_HOME = "/app/musicHomeAc";//音乐首页
     public static final String MUSIC_LIST = "/app/musicListAc";//音乐列表
+    public static final String STORY_LIST = "/app/storyListAc";//故事列表列表
 }

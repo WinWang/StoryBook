@@ -50,6 +50,7 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.activity.SplashActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,13 +64,20 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.activity.MusicHomeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.activity.MusicListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.activity.MusicDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape" />
 
         <activity
-            android:name=".ui.activity.MusicDetailActivity"
+            android:name=".ui.activity.StoryListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"></activity>
 
 

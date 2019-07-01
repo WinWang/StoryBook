@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -105,12 +107,14 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.virbrate_animate);
+        ivHomeBird.startAnimation(animation);
         CenterSnapHelper centerSnapHelper = new CenterSnapHelper();
         layoutManager.setRadius(AutoSizeUtils.dp2px(this, 1800));
         layoutManager.setAngleInterval(10);
         layoutManager.setCenterScale(1.2f);
         layoutManager.setInfinite(true);
-        layoutManager.setMoveSpeed(0.015f);
+        layoutManager.setMoveSpeed(0.007f);
         ArmsUtils.configRecyclerView(rvHome, layoutManager);
         centerSnapHelper.attachToRecyclerView(rvHome);
         rvHome.setAdapter(adapter);
@@ -174,6 +178,11 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
                         .navigation();
                 break;
             case R.id.iv_home_story:
+                ARouter.getInstance().build(RouterUrl.STORY_LIST)
+                        .withString("queryId", "1")
+                        .withString("command", "1280")
+                        .withString("name", "故事")
+                        .navigation();
                 break;
             case R.id.iv_home_music:
                 break;

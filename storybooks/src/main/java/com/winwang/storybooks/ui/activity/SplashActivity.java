@@ -104,6 +104,8 @@ public class SplashActivity extends BasesActivity<SplashPresenter> implements Sp
         finish();
     }
 
+
+
     @RequestPermissions({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     @Override
     public void jumpCallBack() {
