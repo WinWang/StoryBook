@@ -7,8 +7,10 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -34,11 +36,17 @@ import com.winwang.storybooks.utils.ExoMediaPlayer;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.utils.AutoSizeUtils;
 
@@ -85,7 +93,11 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
     ImageView ivHomeTypeMusicStory;
     @BindView(R.id.iv_home_bird)
     ImageView ivHomeBird;
+    @BindView(R.id.iv_girl_anim)
+    ImageView ivGirlAnim;
     private boolean isStory = true;
+    private boolean isGirlShow = false;
+
     @Inject
     List<StoryListBean.S1005Bean.Classlist1Bean> dataList;
     private ExoMediaPlayer mExoMediaPlayer;
@@ -122,7 +134,6 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
         AnimationDrawable ivHomeBirdDrawable = (AnimationDrawable) ivHomeBird.getDrawable();
         ivHomeBirdDrawable.start();
         initListener();
-//        ViewCompat.animate(ivHomeBird).setDuration(3000).translationY(-200).setInterpolator(new CycleInterpolator(Integer.MAX_VALUE)).start();
 
 
     }
@@ -170,7 +181,7 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
     @OnClick({R.id.iv_home_listen, R.id.iv_home_story, R.id.iv_home_music,
             R.id.iv_home_like, R.id.iv_home_time,
             R.id.iv_home_download, R.id.iv_home_type_music_story,
-            R.id.iv_home_bird})
+            R.id.iv_home_bird, R.id.iv_girl_anim})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_home_listen:
@@ -193,46 +204,90 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
             case R.id.iv_home_download:
                 break;
             case R.id.iv_home_type_music_story:
-                if (mExoMediaPlayer == null) {
-                    mExoMediaPlayer = new ExoMediaPlayer(this);
-                }
-                if (isStory) {
-                    mExoMediaPlayer.playSoundSingle(R.raw.erge);
-                    ivHomeTypeMusicStory.setImageResource(R.drawable.music_anim);
-                    mPresenter.changeList(true);
-                    if (dataList.size() > 0) {
-                        rvHome.scrollToPosition(0);
-                        rvHome.smoothScrollToPosition(1);
-                    }
-                } else {
-                    mExoMediaPlayer.playSoundSingle(R.raw.gushi);
-                    ivHomeTypeMusicStory.setImageResource(R.drawable.story_anim);
-                    mPresenter.changeList(false);
-                    if (dataList.size() > 0) {
-                        rvHome.scrollToPosition(1);
-                        rvHome.smoothScrollToPosition(0);
-                    }
-                }
-                isStory = !isStory;
+                changeSvM();
                 AnimationDrawable drawable = (AnimationDrawable) ivHomeTypeMusicStory.getDrawable();
                 drawable.start();
 
                 break;
             case R.id.iv_home_bird:
+                changeSvM();
+                drawable = (AnimationDrawable) ivHomeTypeMusicStory.getDrawable();
+                drawable.start();
+                break;
+            case R.id.iv_girl_anim:
+                if (!isGirlShow) {
+                    isGirlShow = true;
+                    ViewCompat.animate(ivGirlAnim).setDuration(500).translationX(getResources().getDimension(R.dimen.girl_move)).setInterpolator(new AccelerateInterpolator()).start();
+                    ivGirlAnim.setImageResource(R.drawable.girl_anim);
+                    AnimationDrawable girlAnimDrawable = (AnimationDrawable) ivGirlAnim.getDrawable();
+                    girlAnimDrawable.start();
+                    setTimeOut();
+                } else {
+                    ARouter.getInstance().build(RouterUrl.TALK_LIST)
+                            .navigation();
+                }
 
                 break;
         }
     }
 
+    private void setTimeOut() {
+        Observable.timer(5, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDispose(d);
+                    }
 
-    @Override
-    public Resources getResources() {
-        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));
-        return super.getResources();
+                    @Override
+                    public void onNext(Long aLong) {
+                        ViewCompat.animate(ivGirlAnim).setDuration(500).translationX(0).setInterpolator(new AccelerateInterpolator()).start();
+                        ivGirlAnim.setImageResource(R.drawable.btn_girl_woyaojiang);
+                        isGirlShow = false;
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    private void changeSvM() {
+        if (mExoMediaPlayer == null) {
+            mExoMediaPlayer = new ExoMediaPlayer(this);
+        }
+        if (isStory) {
+            mExoMediaPlayer.playSoundSingle(R.raw.erge);
+            ivHomeTypeMusicStory.setImageResource(R.drawable.music_anim);
+            mPresenter.changeList(true);
+            if (dataList.size() > 0) {
+                rvHome.scrollToPosition(0);
+                rvHome.smoothScrollToPosition(1);
+            }
+        } else {
+            mExoMediaPlayer.playSoundSingle(R.raw.gushi);
+            ivHomeTypeMusicStory.setImageResource(R.drawable.story_anim);
+            mPresenter.changeList(false);
+            if (dataList.size() > 0) {
+                rvHome.scrollToPosition(1);
+                rvHome.smoothScrollToPosition(0);
+            }
+        }
+        isStory = !isStory;
     }
 
     @Override
     protected void onDestroy() {
+        unDispose();
         stopService(new Intent(this, PlayService.class));
         if (mExoMediaPlayer != null) {
             mExoMediaPlayer.release();
@@ -241,8 +296,8 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         EventBus.getDefault().post(new MusicEvent("homePause"));
     }
 
@@ -251,4 +306,5 @@ public class HomeActivity extends BasesActivity<HomePresenter> implements HomeCo
         super.onResume();
         EventBus.getDefault().post(new MusicEvent("homePlay"));
     }
+
 }

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -17,6 +18,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.qmuiteam.qmui.widget.QMUITopBar;
 import com.winwang.storybooks.R;
+import com.winwang.storybooks.adapter.StoryCatAdapter;
 import com.winwang.storybooks.adapter.StoryListAdapter;
 import com.winwang.storybooks.base.BasesActivity;
 import com.winwang.storybooks.common.RouterUrl;
@@ -30,6 +32,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -68,10 +72,16 @@ public class StoryListActivity extends BasesActivity<StoryListPresenter> impleme
     List<StoryInListBean.ClasslistBean> storyList;
     @Inject
     LinearLayoutManager mLinearLayoutManager;
+    @Inject
+    StoryCatAdapter mCatAdapter;
+
+
+    @BindView(R.id.iv_bird)
+    ImageView ivBird;
 
 
     private int pageIndex = 1;
-
+    private boolean showCat = false;//展示类别切换
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -140,5 +150,15 @@ public class StoryListActivity extends BasesActivity<StoryListPresenter> impleme
                 .withString("videoId", id)
                 .withString("name", name)
                 .navigation();
+    }
+
+    @OnClick(R.id.iv_bird)
+    public void onViewClicked() {
+        if (!showCat) {
+            rvStoryList.setAdapter(mCatAdapter);
+        } else {
+            rvStoryList.setAdapter(mListAdapter);
+        }
+        showCat = !showCat;
     }
 }

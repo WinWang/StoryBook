@@ -1,6 +1,7 @@
 package com.winwang.storybooks.base;
 
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +26,10 @@ import com.winwang.storybooks.entity.BaseBean;
 import com.winwang.storybooks.loadingcallback.EmptyCallback;
 import com.winwang.storybooks.loadingcallback.ErrorCallback;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import me.jessyan.autosize.AutoSizeCompat;
+
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
 /**
@@ -39,6 +44,7 @@ public abstract class BasesActivity<P extends IPresenter> extends BaseActivity<P
     protected QMUITopBar topBar;
     protected TextView mTitle;
     private QMUITipDialog tipDialog;
+    protected CompositeDisposable mCompositeDisposable;
 
     @Override
     protected void setLoadingLayout(@Nullable Bundle savedInstanceState) {
@@ -146,5 +152,34 @@ public abstract class BasesActivity<P extends IPresenter> extends BaseActivity<P
     public void showMessage(@NonNull String message) {
         checkNotNull(message);
         ArmsUtils.snackbarText(message);
+    }
+
+    public void addDispose(Disposable disposable) {
+        if (mCompositeDisposable == null) {
+            mCompositeDisposable = new CompositeDisposable();
+        }
+        mCompositeDisposable.add(disposable);//将所有 Disposable 放入容器集中处理
+    }
+
+    /**
+     * 停止集合中正在执行的 RxJava 任务
+     */
+    public void unDispose() {
+        if (mCompositeDisposable != null) {
+            mCompositeDisposable.clear();//保证 Activity 结束时取消所有正在执行的订阅
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mCompositeDisposable = null;
+        super.onDestroy();
+    }
+
+    @Override
+    public Resources getResources() {
+        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));
+        return super.getResources();
+
     }
 }

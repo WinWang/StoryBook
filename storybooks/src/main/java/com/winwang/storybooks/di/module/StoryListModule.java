@@ -10,6 +10,7 @@ import dagger.Provides;
 
 import com.winwang.storybooks.R;
 import com.winwang.storybooks.adapter.MusicListAdapter;
+import com.winwang.storybooks.adapter.StoryCatAdapter;
 import com.winwang.storybooks.adapter.StoryListAdapter;
 import com.winwang.storybooks.entity.MusicListBean;
 import com.winwang.storybooks.entity.StoryInListBean;
@@ -57,6 +58,19 @@ public abstract class StoryListModule {
     @Provides
     static StoryListAdapter provideAdapter(List<StoryInListBean.ClasslistBean> dataList) {
         return new StoryListAdapter(R.layout.item_story_list_layout, dataList);
+    }
+
+
+    @ActivityScope
+    @Provides
+    static List<StoryInListBean.CategoryListBean> provideCatList() {
+        return new ArrayList<>();
+    }
+
+    @ActivityScope
+    @Provides
+    static StoryCatAdapter provideCatAdapter(List<StoryInListBean.CategoryListBean> catList) {
+        return new StoryCatAdapter(R.layout.item_music_home_layout, catList);
     }
 
 

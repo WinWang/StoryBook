@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
 import com.winwang.storybooks.AppConfig;
+import com.winwang.storybooks.adapter.StoryCatAdapter;
 import com.winwang.storybooks.adapter.StoryListAdapter;
 import com.winwang.storybooks.entity.MusicListBean;
 import com.winwang.storybooks.entity.StoryInListBean;
@@ -58,6 +59,13 @@ public class StoryListPresenter extends BasePresenter<StoryListContract.Model, S
     @Inject
     StoryListAdapter mListAdapter;
 
+
+    @Inject
+    List<StoryInListBean.CategoryListBean> catList;
+    @Inject
+    StoryCatAdapter mCatAdapter;
+
+
     @Inject
     public StoryListPresenter(StoryListContract.Model model, StoryListContract.View rootView) {
         super(model, rootView);
@@ -65,11 +73,11 @@ public class StoryListPresenter extends BasePresenter<StoryListContract.Model, S
 
     public void queryList(int page, String type, String commond) {
         JSONObject json = new JSONObject();
-        json.put("version", "1.2.3.0");
+        json.put("version", "1.2.3.1");
         json.put("merchantid", "10000");
         json.put("command", commond);
         json.put("clienttype", "3");
-        json.put("clientversion", "1.2.3.0");
+        json.put("clientversion", "1.2.3.1");
         json.put("IMEI", "864329033907351");
         json.put("UserID", "225903");
         json.put("advsource", "Oppo");
@@ -81,7 +89,7 @@ public class StoryListPresenter extends BasePresenter<StoryListContract.Model, S
         json.put("sortType", "");
         json.put("NeedClass", "0");
         json.put("sortBy", "desc");
-        String letters = "1.2.3.010000" + commond + "31.2.3.0864329033907351225903Oppo12" + page + "0" + type + "desc0" + AppConfig.MD5_KEY;
+        String letters = "1.2.3.110000" + commond + "31.2.3.1864329033907351225903Oppo12" + page + "0" + type + "desc0" + AppConfig.MD5_KEY;
         LogUtils.debugInfo(letters);
         String sign = EncryptUtils.encryptMD5ToString(letters).toLowerCase();
         json.put("md", sign);
@@ -99,6 +107,11 @@ public class StoryListPresenter extends BasePresenter<StoryListContract.Model, S
                                 dataList.clear();
                             }
                             dataList.addAll(musicListBean.getClasslist());
+                            List<StoryInListBean.CategoryListBean> categoryList = musicListBean.getCategoryList();
+                            if (categoryList != null && categoryList.size() > 0) {
+                                catList.addAll(musicListBean.getCategoryList());
+                            }
+                            mCatAdapter.notifyDataSetChanged();
                             mListAdapter.notifyDataSetChanged();
                             mRootView.onSuccess();
                         } else {

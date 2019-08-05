@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:repeatCount="20">
+
+    <item
+        android:drawable="@drawable/btn_home_girll1"
+        android:duration="100" />
+
+    <item
+        android:drawable="@drawable/btn_home_girll2"
+        android:duration="100" />
+
+    <item
+        android:drawable="@drawable/btn_home_girll3"
+        android:duration="100" />
+
+
+</animation-list>

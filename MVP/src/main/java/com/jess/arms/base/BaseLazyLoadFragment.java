@@ -70,4 +70,10 @@ public abstract class BaseLazyLoadFragment<P extends IPresenter> extends BaseFra
             dispatchParentVisibleState();
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        isDataLoaded = false;
+        super.onDestroyView();
+    }
 }

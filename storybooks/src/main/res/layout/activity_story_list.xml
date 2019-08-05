@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/list_bg">
+    android:background="@drawable/list_bg"
+    android:orientation="vertical">
 
     <include layout="@layout/layout_head_top_bar" />
 
@@ -14,5 +14,19 @@
         android:layout_height="0dp"
         android:layout_weight="1"></android.support.v7.widget.RecyclerView>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="150pt">
+
+        <ImageView
+            android:id="@+id/iv_bird"
+            android:layout_width="80pt"
+            android:layout_height="80pt"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="50pt"
+            android:src="@drawable/bird" />
+
+
+    </FrameLayout>
 
 </LinearLayout>

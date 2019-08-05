@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="343pt"
+        android:layout_height="297pt"
+        android:layout_marginLeft="20pt"
+        android:layout_marginRight="20pt"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="222pt">
+
+            <ImageView
+                android:id="@+id/iv_talk_cover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="#e5e5e5" />
+
+
+            <Button
+                android:padding="0dp"
+                android:layout_width="197pt"
+                android:layout_height="57pt"
+                android:layout_gravity="center_horizontal|bottom"
+                android:background="@drawable/list_button"
+                android:scaleType="fitXY"
+                android:text="开始录制"
+                android:textColor="#fff"
+                android:textSize="28pt" />
+
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_talk_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20pt"
+            android:text="狼来了"
+            android:textSize="32pt" />
+
+
+    </LinearLayout>
+
+
+</FrameLayout>

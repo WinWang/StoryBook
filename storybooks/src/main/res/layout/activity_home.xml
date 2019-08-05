@@ -86,4 +86,15 @@
         android:layout_marginBottom="100pt" />
 
 
+    <ImageView
+        android:id="@+id/iv_girl_anim"
+        android:layout_width="100pt"
+        android:layout_height="90pt"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="-60pt"
+        android:layout_marginBottom="150pt"
+        android:src="@drawable/btn_girl_woyaojiang" />
+
+
 </RelativeLayout>

@@ -13,6 +13,7 @@ import com.jess.arms.utils.ArmsUtils;
 import com.kingja.loadsir.callback.SuccessCallback;
 import com.kingja.loadsir.core.LoadSir;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.winwang.storybooks.R;
 import com.winwang.storybooks.base.BasesActivity;
 import com.winwang.storybooks.common.RouterUrl;
@@ -105,7 +106,6 @@ public class SplashActivity extends BasesActivity<SplashPresenter> implements Sp
     }
 
 
-
     @RequestPermissions({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     @Override
     public void jumpCallBack() {
@@ -116,6 +116,11 @@ public class SplashActivity extends BasesActivity<SplashPresenter> implements Sp
     @Override
     public void setSeconds(long second) {
         rbtSeconds.setText(second + "s");
+    }
+
+    @Override
+    public RxPermissions getRxPermissions() {
+        return new RxPermissions(this);
     }
 
     @OnClick(R.id.rbt_seconds)

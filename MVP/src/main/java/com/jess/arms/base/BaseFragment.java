@@ -29,6 +29,7 @@ import com.jess.arms.integration.cache.Cache;
 import com.jess.arms.integration.cache.CacheType;
 import com.jess.arms.integration.lifecycle.FragmentLifecycleable;
 import com.jess.arms.mvp.IPresenter;
+import com.jess.arms.mvp.IView;
 import com.jess.arms.utils.ArmsUtils;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
@@ -51,7 +52,7 @@ import io.reactivex.subjects.Subject;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public abstract class BaseFragment<P extends IPresenter> extends Fragment implements IFragment, FragmentLifecycleable {
+public abstract class BaseFragment<P extends IPresenter> extends Fragment implements IFragment, FragmentLifecycleable{
     protected final String TAG = this.getClass().getSimpleName();
     private final BehaviorSubject<FragmentEvent> mLifecycleSubject = BehaviorSubject.create();
     private Cache<String, Object> mCache;

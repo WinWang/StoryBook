@@ -19,9 +19,11 @@ import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 
 import javax.inject.Inject;
 
+import com.jess.arms.utils.PermissionUtil;
 import com.jess.arms.utils.RxLifecycleUtils;
 import com.winwang.storybooks.mvp.contract.SplashContract;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -81,7 +83,23 @@ public class SplashPresenter extends BasePresenter<SplashContract.Model, SplashC
                 System.out.println("我还在执行>>>>" + aLong);
                 mRootView.setSeconds(aLong);
                 if (aLong == 1) {
-                    mRootView.jumpCallBack();
+                    PermissionUtil.externalStorage(new PermissionUtil.RequestPermission() {
+                        @Override
+                        public void onRequestPermissionSuccess() {
+                            mRootView.jumpCallBack();
+                        }
+
+                        @Override
+                        public void onRequestPermissionFailure(List<String> permissions) {
+
+                        }
+
+                        @Override
+                        public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+
+                        }
+                    }, mRootView.getRxPermissions(), mErrorHandler);
+
                 }
 
             }
