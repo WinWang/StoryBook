@@ -219,7 +219,9 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
     @Override
     public void onComplete() {
         seekProgress.setProgress(0);
-        ivVideoPlay.setImageResource(R.drawable.play_play);
+        if (ivVideoPlay != null) {
+            ivVideoPlay.setImageResource(R.drawable.play_play);
+        }
         hasComplete = true;
         playTag = false;
         LogUtils.debugInfo(">>>>>>播放完成");
@@ -227,14 +229,18 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
 
     @Override
     public void onPlayerPause() {
-        ivVideoPlay.setImageResource(R.drawable.play_play);
+        if (ivVideoPlay != null) {
+            ivVideoPlay.setImageResource(R.drawable.play_play);
+        }
         playTag = false;
         LogUtils.debugInfo(">>>>>>播放暂停");
     }
 
     @Override
     public void onPlayerPlay() {
-        ivVideoPlay.setImageResource(R.drawable.play_suspend);
+        if (ivVideoPlay != null) {
+            ivVideoPlay.setImageResource(R.drawable.play_suspend);
+        }
         playTag = true;
         LogUtils.debugInfo(">>>>>>播放开始");
     }
