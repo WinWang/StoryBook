@@ -141,6 +141,7 @@ public class VideoDetailActivity extends BasesActivity<VideoDetailPresenter> imp
     @Override
     protected void onDestroy() {
         getCurPlay().release();
+        playerVideo = null;
         super.onDestroy();
     }
 

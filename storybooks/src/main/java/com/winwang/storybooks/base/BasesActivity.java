@@ -178,7 +178,8 @@ public abstract class BasesActivity<P extends IPresenter> extends BaseActivity<P
 
     @Override
     public Resources getResources() {
-        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));
+//        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));
+        AutoSizeCompat.autoConvertDensity((super.getResources()), 750, false);//如果有自定义需求就用这个方法
         return super.getResources();
 
     }
