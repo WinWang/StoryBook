@@ -210,10 +210,11 @@ public class MusicDetailActivity extends BasesActivity<MusicDetailPresenter> imp
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (isPlaying) {
-            mExoMediaPlayer.setCurrentPos(progress);
-        }
-    }
+        System.out.println(">>>>>>>>>>>Progress");
+//        if (isPlaying) {
+//            mExoMediaPlayer.setCurrentPos(progress);
+//        }
+}
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -225,5 +226,8 @@ public class MusicDetailActivity extends BasesActivity<MusicDetailPresenter> imp
     public void onStopTrackingTouch(SeekBar seekBar) {
         System.out.println("stopTrack>>>>>>");
         hasTouchSeek = false;
+        if (isPlaying) {
+            mExoMediaPlayer.setCurrentPos(seekBar.getProgress());
+        }
     }
 }

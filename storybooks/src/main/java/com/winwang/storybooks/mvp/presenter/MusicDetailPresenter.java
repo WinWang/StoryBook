@@ -13,6 +13,7 @@ import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
 import com.jess.arms.utils.LogUtils;
 import com.jess.arms.utils.RxLifecycleUtils;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.winwang.storybooks.AppConfig;
 import com.winwang.storybooks.entity.AudioDetailBean;
 import com.winwang.storybooks.mvp.contract.MusicDetailContract;
@@ -70,17 +71,17 @@ public class MusicDetailPresenter extends BasePresenter<MusicDetailContract.Mode
 
     public void getAudioDetail(String audioId) {
         JSONObject json = new JSONObject();
-        json.put("version", "1.2.3.0");
+        json.put("version", "1.2.4.8");
         json.put("merchantid", "10000");
         json.put("command", "1011");
         json.put("clienttype", "3");
-        json.put("clientversion", "1.2.3.0");
+        json.put("clientversion", "1.2.4.8");
         json.put("IMEI", "864329033907351");
         json.put("UserID", "225903");
         json.put("advsource", "Oppo");
         json.put("qingxidu", "1");
         json.put("videoid", audioId);
-        String sign = EncryptUtils.encryptMD5ToString("1.2.3.010000101131.2.3.0864329033907351225903Oppo" + audioId + "1" + AppConfig.MD5_KEY).toLowerCase();
+        String sign = EncryptUtils.encryptMD5ToString("1.2.4.810000101131.2.4.8864329033907351225903Oppo" + audioId + "1" + AppConfig.MD5_KEY).toLowerCase();
         json.put("md", sign);
         String jsonString = json.toJSONString();
         RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), jsonString);
@@ -110,8 +111,8 @@ public class MusicDetailPresenter extends BasePresenter<MusicDetailContract.Mode
 
     public void setTimeUpdate() {
         Observable.interval(0, 700, TimeUnit.MILLISECONDS)
-                .compose(RxLifecycleUtils.bindToLifecycle(mRootView)) //在声明周期的完成以后销毁
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .compose(RxLifecycleUtils.bindUntilEvent(mRootView, ActivityEvent.DESTROY)) //在声明周期的完成以后销毁
+                .subscribeOn(Schedulers.io())
                 .unsubscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
