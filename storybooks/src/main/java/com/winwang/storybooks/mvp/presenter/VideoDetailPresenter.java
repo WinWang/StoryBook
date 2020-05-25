@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.EncryptUtils;
+import com.blankj.utilcode.util.JsonUtils;
 import com.blankj.utilcode.util.ObjectUtils;
 import com.google.gson.Gson;
 import com.jess.arms.integration.AppManager;
@@ -33,6 +34,9 @@ import com.winwang.storybooks.mvp.contract.VideoDetailContract;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 
 /**
@@ -69,21 +73,43 @@ public class VideoDetailPresenter extends BasePresenter<VideoDetailContract.Mode
     }
 
     public void getVideoDetail() {
-        JSONObject json = new JSONObject();
-        json.put("version", "1.2.3.0");
-        json.put("merchantid", "10000");
-        json.put("command", "1011");
-        json.put("clienttype", "3");
-        json.put("clientversion", "1.2.3.0");
-        json.put("IMEI", "864329033907351");
-        json.put("UserID", "225903");
-        json.put("advsource", "Oppo");
-        json.put("qingxidu", "1");
-        json.put("videoid", mRootView.getVideoId());
-        String sign = EncryptUtils.encryptMD5ToString("1.2.3.010000101131.2.3.0864329033907351225903Oppo" + mRootView.getVideoId() + "1" + AppConfig.MD5_KEY).toLowerCase();
-        json.put("md", sign);
-        String jsonString = json.toJSONString();
-        RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), jsonString);
+
+        TreeMap<String, String> map = new TreeMap<>();
+        map.put("version", "1.2.4.8");
+        map.put("merchantid", "10000");
+        map.put("command", "1011");
+        map.put("clienttype", "3");
+        map.put("clientversion", "1.2.4.8");
+        map.put("IMEI", "864329033907351");
+        map.put("UserID", "225903");
+        map.put("advsource", "Oppo");
+        map.put("qingxidu", "1");
+        map.put("videoid", mRootView.getVideoId());
+        Set<Map.Entry<String, String>> entries = map.entrySet();
+        StringBuilder builder = new StringBuilder("");
+        for (Map.Entry<String, String> entry : entries) {
+            String value = entry.getValue();
+            builder.append(value);
+        }
+//        String sign = EncryptUtils.encryptMD5ToString(builder.toString() + AppConfig.MD5_KEY).toLowerCase();
+//        String sign = EncryptUtils.encryptMD5ToString("1.2.4.810000101131.2.4.8864329033907351225903Oppo"+AppConfig.MD5_KEY).toLowerCase();
+//        JSONObject json = new JSONObject();
+//        json.put("version", "1.2.3.0");
+//        json.put("merchantid", "10000");
+//        json.put("command", "1011");
+//        json.put("clienttype", "3");
+//        json.put("clientversion", "1.2.3.0");
+//        json.put("IMEI", "864329033907351");
+//        json.put("UserID", "225903");
+//        json.put("advsource", "Oppo");
+//        json.put("qingxidu", "1");
+//        json.put("videoid", mRootView.getVideoId());
+        String sign = EncryptUtils.encryptMD5ToString("1.2.4.810000101131.2.4.8864329033907351225903Oppo" + mRootView.getVideoId() + "1" + AppConfig.MD5_KEY).toLowerCase();
+//        String sign = EncryptUtils.encryptMD5ToString("1.2.4.810000101131.2.4.8864329033907351225903Oppo0102030405060708").toLowerCase();
+        map.put("md", sign);
+        String s = JSONObject.toJSONString(map);
+//        String jsonString = json.toJSONString();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), s);
         mModel.getVideoDetail(requestBody, mRootView.getVideoId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
