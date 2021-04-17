@@ -102,7 +102,7 @@ public class EmptyControlVideo extends StandardGSYVideoPlayer {
     }
 
     public void loadCoverImage(String url) {
-        Glide.with(getContext().getApplicationContext())
+        Glide.with(context)
                 .load(url)
                 .into(cover);
     }
